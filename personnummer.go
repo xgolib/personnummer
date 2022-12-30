@@ -1,7 +1,9 @@
 package personnummer
 
 import (
+	"strings"
 	"time"
+	"unicode"
 
 	pn "github.com/personnummer/go/v3"
 )
@@ -16,6 +18,12 @@ type Personnummer struct {
 }
 
 func Parse(id string) (*Personnummer, error) {
+	id = strings.Map(func(r rune) rune {
+		if !unicode.IsSpace(r) {
+			return r
+		}
+		return -1
+	}, id)
 	ret, err := pn.New(id)
 	if err != nil {
 		return nil, err
